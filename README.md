@@ -4,7 +4,7 @@ A collection of Python notebooks and scripts for analyzing, forecasting, and vis
 
 ---
 
-## 🔍 Overview
+## Overview
 
 This project focuses on:
 
@@ -41,11 +41,4 @@ CSIRO_ENSO/
 └── README.md                           # This file
 </pre>
 
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-Make sure you have the following Python packages:
 
