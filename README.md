@@ -1,6 +1,6 @@
 # CSIRO_ENSO
 
-A collection of Python notebooks and scripts for analyzing, forecasting, and visualizing ENSO (El Niño–Southern Oscillation) behavior using ACCESS-S2 seasonal forecasts and observational data. This repository supports categorical ENSO classification, forecast evaluation, and tailored analyses of ENSO's impact across time and space.
+This repository contains Python notebooks that use categorical ENSO information to assess rainfall risk over Australia using the Fraction of Attributable Risk (FAR) method. It also contains notebooks for evaluating seasonal forecasts from ACCESS-S2 against an ENSO based forecast.  
 
 ---
 
@@ -8,10 +8,10 @@ A collection of Python notebooks and scripts for analyzing, forecasting, and vis
 
 This project focuses on:
 
-- **Categorical ENSO classification** using various methods (percentiles, parametric distributions)
-- **Seasonal forecast verification** using ACCESS-S2 data
-- **ENSO signal exploration** in observed and forecasted climate variables
-- **Probability-based event forecasting**, including extremes and medians
+- **ENSO rainfall relationships** over Australia 
+- **FAR analysis** to attribute wet and dry years to ENSO  
+- **Seasonal forecast verification** using ACCESS-S2 
+- **Probability-based event forecasting** using categorical ENSO classifications 
 
 ---
 
@@ -20,15 +20,15 @@ This project focuses on:
 <pre>
 CSIRO_ENSO/
 │
-├── categorical_enso_functions.py       # Core functions for categorical ENSO classification
+├── categorical_enso_functions.py       # Core functions for analysis 
 │
-├── FAR/                                # Forecast verification and signal analysis
+├── FAR/                                # FAR analysis using observations and ACCESS-S2
 │   ├── ACCESS-S2 lag0 all ensembles.ipynb
 │   ├── ACCESS-S2 lag9 all ensembles.ipynb
 │   ├── Categorical ENSO AGCD.ipynb
 │   └── Categorical ENSO - parametric CDF.ipynb
 │
-├── Forecasting/                        # Forecast probability analysis using thresholds
+├── Forecasting/                        # Forecast verification and probability-based event forecasting
 │   ├── ACCESS-S2 RAW.ipynb
 │   ├── ACCESS-S2 calibrated climatology.ipynb
 │   ├── ACCESS-S2 calibrated correlations.ipynb
