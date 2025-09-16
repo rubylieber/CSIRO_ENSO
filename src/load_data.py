@@ -3,6 +3,7 @@
 import xarray as xr
 from pathlib import Path
 import datetime as dt
+import pandas as pd
 
 CALIBRATED_PR_DIR = Path('/g/data/ux62/access-s2/hindcast/calibrated/atmos/pr/monthly/')
 
