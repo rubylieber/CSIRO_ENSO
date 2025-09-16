@@ -4,8 +4,16 @@ import xarray as xr
 from pathlib import Path
 import datetime as dt
 import pandas as pd
+import itertools
+import os
+import sys
 
-CALIBRATED_PR_DIR = Path('/g/data/ux62/access-s2/hindcast/calibrated/atmos/pr/monthly/')
+sys.path.append(Path(__file__).parent.resolve())
+
+from config import *
+from . import logger
+
+LOG = logger.get_logger(__name__)
 
 def generate_lag_dates(month_day_string):
     """
@@ -24,3 +32,27 @@ def generate_lag_dates(month_day_string):
         dates.extend(date_range)
 
     return dates
+
+def generate_file_list(ens,dates):
+    """
+    Generate a list of ACCESS-S2 hindcast filepaths for a give ensemble string 
+    (e.g. 'e01') and list of dates
+    """
+
+    allowed_ens = {'e01', 'e02', 'e03'} #Allowed values of ensemble string
+
+
+    if ens not in allowed_ens:
+        LOG.error(f'{ens} is not an allowed value : {allowed_ens}')
+        LOG.error('Specify an allowed ensemble string')
+        sys.exit()
+
+    patterns = [f"{ens}/maq5_pr_{dt.datetime.strftime(date,'%Y%m%d')}_{ens}.nc" for date in dates]
+
+    matched = list(
+        itertools.chain.from_iterable(
+            CALIBRATED_PR_DIR.glob(pattern) for pattern in patterns
+        )
+    )
+
+    return matched

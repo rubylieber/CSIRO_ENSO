@@ -5,7 +5,9 @@ import xarray as xr
 import datetime as dt
 import pandas as pd
 import itertools
-from src.load_data import generate_lag_dates
+import pytest
+from src.load_data import generate_lag_dates, generate_file_list
+
 
 def test_lag_dates():
    """
@@ -36,8 +38,24 @@ def test_lag_dates():
 
    test_dates = [ d for d in dates if d.year == 2004 ]
 
+   assert len(test_dates) == 9
+
    # Check their days and months are valid from February 22 to March 1st
    days =  [ d.day for d in test_dates ]
    months =  [ d.month for d in test_dates ]
    assert days == [22, 23, 24, 25, 26, 27, 28, 29, 1]
    assert months == [2, 2, 2, 2, 2, 2, 2, 2, 3]
+
+
+def test_file_list():
+   """
+   Checks the number of files generated for a given list of dates
+   """
+   # Test first for 1st September
+   start_date_string = '0901'
+   dates = generate_lag_dates(start_date_string)
+
+   ens = 'e04'
+   with pytest.raises(SystemExit) as pytest_exit:  
+      files = generate_file_list(ens,dates)
+   assert pytest_exit.type == SystemExit
