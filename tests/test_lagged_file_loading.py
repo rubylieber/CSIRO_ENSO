@@ -18,7 +18,7 @@ def test_lag_dates():
    start_date_string = '0901'
    dates = generate_lag_dates(start_date_string)
 
-   # We should have 38 years * 9 dates = 343
+   # We should have 38 years * 9 dates = 342
    assert len(dates) == 342
 
    # Test for year 2000, the are nine dates valid from August 24- Sep 1
@@ -59,3 +59,10 @@ def test_file_list():
    with pytest.raises(SystemExit) as pytest_exit:  
       files = generate_file_list(ens,dates)
    assert pytest_exit.type == SystemExit
+
+   ens = 'e03'
+
+   file_list = generate_file_list(ens,dates)
+
+   # We should have 38 years * 9 dates = 342
+   assert len(file_list) == 342

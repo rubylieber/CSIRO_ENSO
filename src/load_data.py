@@ -13,6 +13,8 @@ sys.path.append(Path(__file__).parent.resolve())
 from config import *
 from . import logger
 
+CALIBRATED_PR_DIR = Path('/g/data/ux62/access-s2/hindcast/calibrated/atmos/pr/monthly/')
+
 LOG = logger.get_logger(__name__)
 
 def generate_lag_dates(month_day_string):
@@ -32,6 +34,7 @@ def generate_lag_dates(month_day_string):
         dates.extend(date_range)
 
     return dates
+
 
 def generate_file_list(ens,dates):
     """
@@ -56,3 +59,26 @@ def generate_file_list(ens,dates):
     )
 
     return matched
+
+
+def load_data(ens,month_day_string):
+    """
+    Load a complete ACCESS-S2 hindcast of precipiation valid from a specified
+    day of the month 'MMDD'
+    """
+
+    dates = generate_lag_dates(month_day_string)
+
+    files = generate_file_list(ens,dates)
+
+    datasets = [ xr.open_dataset(file).pr for file in files[:9]]
+
+
+def load_dataset(filename):
+    """
+    Load a single ACCESS-S2 precip dataset into an xarray DataArray, and create
+    and ensemble dimensions based on the input filename.
+    """
+    data = xr.open_dataset(filename).pr
+
+    
