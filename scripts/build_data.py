@@ -20,7 +20,7 @@ from load_data import compute_hindcast_data
 
 #LOG = logger.get_logger(__name__)
 
-month_day_string='0201'
+month_day_string='0301'
 
 ds = compute_hindcast_data(month_day_string)
 

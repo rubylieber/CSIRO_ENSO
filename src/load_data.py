@@ -3,6 +3,7 @@
 import xarray as xr
 from pathlib import Path
 import datetime as dt
+import calendar
 import pandas as pd
 import itertools
 import os
@@ -22,14 +23,24 @@ LOG = logger.get_logger(__name__)
 def generate_lag_dates_year(month_day_string,year):
     """
     For a given start date expressed as a month-day-string (e.g. 0901), 
-    generate a list of timestamp objects across the entire hindcast period 1981-2018 for the nine-day lagged ensemble valid from this start date
+    generate a list of timestamp objects across the entire hindcast period 1981-2018 
+    for the nine-day lagged ensemble valid from this start date
+    Contains extra logic for leap years, as there are no hindcast files for February 29
     """
 
     dates = []
 
     start_date = dt.datetime.strptime(str(year)+month_day_string,'%Y%m%d')
 
-    date_range = pd.date_range(end=start_date,periods=9)
+    if calendar.isleap(int(year)) and month_day_string == '0301':
+        # Logic to handle the lack of February 29th hindcast files
+        date_range = pd.date_range(end=start_date,periods=10)
+
+        # Remove Feb 29th
+        date_range = date_range.drop(pd.to_datetime(str(year) + '-02-29'))
+
+    else:
+        date_range = pd.date_range(end=start_date,periods=9)
 
     dates.extend(date_range)
 
@@ -39,7 +50,8 @@ def generate_lag_dates_year(month_day_string,year):
 def generate_file_list(month_day_string, 
                        year):
     """
-    Generate a list of tuples containing the ensemble member, valid timesmap and index (1-27) for a ACCESS-S2 hindcast valid at the prescribed year 
+    Generate a list of tuples containing the ensemble member, valid timesmap and index (1-27) 
+    for a ACCESS-S2 hindcast valid at the prescribed year 
     (e.g. '2010') and month-day-string (e.g. '0901')
     """
 
@@ -55,7 +67,8 @@ def generate_file_list(month_day_string,
 
 def seasonal_mean(ds):
     """
-    Compute a weighted seasonal mean (valid for September-October-November) of a dataset, following the example provided in the xarray docs
+    Compute a weighted seasonal mean (valid for September-October-November) of a dataset, 
+    following the example provided in the xarray docs
     https://docs.xarray.dev/en/stable/examples/monthly-means.html
     """
     
@@ -102,7 +115,7 @@ def load_yearly_lagged_ensemble(month_day_string,
                 LOG.error(f'Check defintion of CALIBRATED_PR_DIR : {CALIBRATED_PR_DIR}')
                 sys.exit()
         else:
-            LOG.error(f'No file matching {pattern} found in {CALIBRATED_PIR_DIR}')
+            LOG.error(f'No file matching {pattern} found in {CALIBRATED_PR_DIR}')
             LOG.error(f'Check definition of start dates and source directories')
             sys.exit()
 
